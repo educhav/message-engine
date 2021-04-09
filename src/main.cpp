@@ -30,14 +30,15 @@ void read_file(const int file_number, Sender* sender)
     json file_data = json::parse(stream);
     auto messages = file_data["messages"];
 
-    if (sender->messages.size() != 0) 
+    if (sender->messages.size() == 0) 
     {
         sender->messages = std::vector<Message>(messages.size() / Facebook::PARTICIPANT_COUNT);
     }
 
     for (unsigned long i = 0; i < messages.size(); i++) 
     {
-        if (messages.at(i)["content"] == nullptr)
+        if (messages.at(i)["content"] == nullptr || 
+                messages.at(i)["content"] == "")
         {
             continue;
         }
@@ -68,8 +69,9 @@ int main(int argc, char* argv[])
         case 'r':
             for (unsigned int i = 0; i < Facebook::PARTICIPANT_COUNT; i++) 
             {
-                std::string first_name = Facebook::PARTICIPANTS[i].substr(0, 
-                        Facebook::PARTICIPANTS[i].find(" "));
+                std::string first_name = Facebook::PARTICIPANTS[i].compare("JJ Joseph") ? 
+                    Facebook::PARTICIPANTS[i].substr(0, Facebook::PARTICIPANTS[i].find(" "))
+                    : "JJJ";
                 Sender sender = {Facebook::PARTICIPANTS[i], std::vector<Message>()};
                 read_all(&sender);
                 std::ofstream file{Facebook::RAW_DIRECTORY + first_name + ".txt"};
@@ -82,5 +84,12 @@ int main(int argc, char* argv[])
                 }
             }
             break;
+        case 't': 
+            Sender sender = {"Samuel Adams", std::vector<Message>()};
+            read_all(&sender);
+            for(Message m : sender.messages)
+            {
+                std::cout << m.message << std::endl;
+            }
     }
 }
