@@ -37,8 +37,7 @@ void read_file(const int file_number, Sender* sender)
 
     for (unsigned long i = 0; i < messages.size(); i++) 
     {
-        if (messages.at(i)["content"] == nullptr || 
-                messages.at(i)["content"] == "")
+        if (messages.at(i)["content"] == nullptr)
         {
             continue;
         }
@@ -46,7 +45,7 @@ void read_file(const int file_number, Sender* sender)
         std::string author = messages.at(i)["sender_name"];
         long timestamp = messages.at(i)["timestamp_ms"];
 
-        if(author.compare(sender->name) == 0) 
+        if(author.compare(sender->name) == 0 && message != "") 
         {
             Message msg = {message, timestamp};
             sender->messages.push_back(msg);
@@ -77,8 +76,7 @@ int main(int argc, char* argv[])
                 std::ofstream file{Facebook::RAW_DIRECTORY + first_name + ".txt"};
                 for (Message m : sender.messages)
                 {
-                    if (m.message != "") 
-                    {
+                    if (m.message != "") {
                         file << m.message << "|?|?|" << m.timestamp << std::endl;
                     }
                 }
