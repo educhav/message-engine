@@ -6,8 +6,8 @@ namespace Facebook {
                                         "J Cole Patt", "Elijah Parker", "Maci Marckx", 
                                         "Christopher Catunao", "Chloe Cumberworth", 
                                         "Berto Medina", "Valerie Kaley", "Dolly Saphire", 
-                                        "Rebecca St Ange", "Caleb Rondeau","Rande Plewka", 
-                                        "Lexi Fergelic", "Drake Fox", "JJ San Nicolas"};
+                                        "Caleb Rondeau","Rande Plewka", "Lexi Fergelic", 
+                                        "Drake Fox", "JJ San Nicolas"};
     const unsigned int PARTICIPANT_COUNT = sizeof(PARTICIPANTS) / sizeof(PARTICIPANTS[0]);
     const std::string FILTERED[] = {"joined the group chat."};
 

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <ctime>
-#include <chrono>
 #include <nlohmann/json.hpp>
 
 #include "engine.h"
@@ -61,7 +59,7 @@ void read_all(Sender* sender)
     }
 }
 
-int main(int argc, char* argv[]) 
+int main(const int argc, const char* argv[]) 
 {
     switch(argv[1][0])
     {
