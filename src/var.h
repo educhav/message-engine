@@ -1,4 +1,19 @@
 #include<iostream>
+#include<vector>
+
+class Message
+{
+    public:
+        std::string message;
+        long timestamp;
+};
+
+class Sender
+{
+    public:
+        std::string name;
+        std::vector<Message> messages;
+};
 
 namespace Facebook {
     const std::string PARTICIPANTS[] = {"Eddie Chavez", "Degan Nestrichal", "JJ Joseph", 
