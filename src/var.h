@@ -15,7 +15,8 @@ class Sender
         std::vector<Message> messages;
 };
 
-namespace Facebook {
+namespace Facebook 
+{
     const std::string PARTICIPANTS[] = {"Eddie Chavez", "Degan Nestrichal", "JJ Joseph", 
                                         "Samuel Adams", "Austin Medina", "Emma Taylor",
                                         "J Cole Patt", "Elijah Parker", "Maci Marckx", 
@@ -30,4 +31,12 @@ namespace Facebook {
     const std::string RAW_DIRECTORY = "/home/eddie/code/c++/message-engine/raw/";
 
     const int FILE_COUNT = 21;
+    /* Calculated based on avg. amount of lines between ppl to 
+     * initialize vector with proper size to prevent constant O(n) resizing */
+    const int AVG_LINES = 9350;
+}
+
+namespace Benchmark 
+{
+    const unsigned int SAMPLE_SIZE = 1;
 }

@@ -16,6 +16,8 @@ void read_file(const int file_number, Sender* sender, const bool write_to_file)
     if (sender->messages.size() == 0) 
     {
         sender->messages = std::vector<Message>(messages.size() / Facebook::PARTICIPANT_COUNT);
+        /* sender->messages = std::vector<Message>(Facebook::AVG_LINES); */
+        /* sender->messages = std::vector<Message>(50000); */
     }
 
     std::string first_name = sender->name.compare("JJ Joseph") ? 
@@ -38,9 +40,9 @@ void read_file(const int file_number, Sender* sender, const bool write_to_file)
             sender->messages.push_back(msg);
             if (write_to_file)
             {
-                /* file << msg.message << "|?|?|" << msg.timestamp << std::endl; */
                 std::string formatted = msg.message + "|?|?|" + std::to_string(msg.timestamp) + "\n";
-                file.write(formatted.c_str(), formatted.size());
+                file << formatted;
+                /* file.write(formatted.c_str(), formatted.size()); */
             }
         }
     }
@@ -55,4 +57,3 @@ void read_all(Sender* sender, bool write_to_file)
         read_file(i, sender, write_to_file);
     }
 }
-
