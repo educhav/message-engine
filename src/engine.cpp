@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <nlohmann/json.hpp>
+#include <ctype.h>
 
 #include "var.h"
 
