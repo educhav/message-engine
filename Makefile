@@ -3,6 +3,9 @@ run: compile
 raw: compile
 	rm -f raw/*
 	./main r
+full: compile
+	rm -f raw/FULL.txt
+	./main f
 test: compile
 	./main t
 benchmark: compile

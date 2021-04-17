@@ -35,5 +35,7 @@ int main(const int argc, const char* argv[])
             }
         }
             break;
+        case 'f':
+            read_full(true);
     }
 }
