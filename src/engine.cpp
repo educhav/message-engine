@@ -2,11 +2,44 @@
 #include <fstream>
 #include <vector>
 #include <nlohmann/json.hpp>
-#include <ctype.h>
 
 #include "var.h"
 
 using json = nlohmann::json;
+
+int read_full(const bool write_to_file) 
+{
+    int counter = 0;
+    for(unsigned int i = Facebook::FILE_COUNT; i > 0; i--) 
+    {
+        std::ifstream stream(Facebook::MESSAGE_DIRECTORY + std::to_string(i) + ".json");
+        json file_data = json::parse(stream);
+        auto messages = file_data["messages"];
+        std::ofstream file{Facebook::RAW_DIRECTORY + "FULL.txt", std::ios_base::app};
+
+        for (unsigned int i = 0; i < messages.size(); i++) 
+        {
+            if (messages.at(i)["content"] == nullptr)
+            {
+                continue;
+            }
+            std::string message = messages.at(i)["content"];
+            std::string author = messages.at(i)["sender_name"];
+            long timestamp = messages.at(i)["timestamp_ms"];
+            if (message != "") 
+            {
+                counter++;
+                if (write_to_file) 
+                {
+                    std::string formatted = message + "|?|?|" + std::to_string(timestamp)
+                        + "|?|?|" + std::to_string(counter) +  "|?|?|" + author + "\n";
+                    file << formatted;
+                }
+            }
+        }
+    }
+    return counter;
+}
 
 void read_file(const int file_number, Sender* sender, const bool write_to_file)
 {
@@ -40,7 +73,7 @@ void read_file(const int file_number, Sender* sender, const bool write_to_file)
             if (write_to_file)
             {
                 std::string formatted = msg.message + "|?|?|" + std::to_string(msg.timestamp) 
-                    + "|?|?|" + std::to_string(i) +  "\n";
+                    + "|?|?|" + std::to_string(read_full(false)) +  "\n";
                 file << formatted;
                 /* file.write(formatted.c_str(), formatted.size()); */
             }
@@ -58,35 +91,8 @@ void read_all(Sender* sender, bool write_to_file)
     }
 }
 
-int read_full(bool write_to_file) {
-    int counter = 0;
-    for(unsigned int i = Facebook::FILE_COUNT; i > 0; i--) 
-    {
-        std::ifstream stream(Facebook::MESSAGE_DIRECTORY + std::to_string(i) + ".json");
-        json file_data = json::parse(stream);
-        auto messages = file_data["messages"];
-        std::ofstream file{Facebook::RAW_DIRECTORY + "FULL.txt", std::ios_base::app};
-
-        for (unsigned int i = 0; i < messages.size(); i++) 
-        {
-            if (messages.at(i)["content"] == nullptr)
-            {
-                continue;
-            }
-            std::string message = messages.at(i)["content"];
-            std::string author = messages.at(i)["sender_name"];
-            long timestamp = messages.at(i)["timestamp_ms"];
-            if (message != "") 
-            {
-                counter++;
-                if (write_to_file) 
-                {
-                    std::string formatted = message + "|?|?|" + std::to_string(timestamp)
-                        + "|?|?|" + std::to_string(counter) +  "|?|?|" + author + "\n";
-                    file << formatted;
-                }
-            }
-        }
-    }
-    return counter;
+int check_index(int timestamp) 
+{
+    return 0;
 }
+
