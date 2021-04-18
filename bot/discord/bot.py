@@ -58,4 +58,4 @@ async def on_message(message):
     if message.content.startswith("?points"):
         person = message.author
         
-client.run('ODI3MDEzMzkxNTI3OTY4Nzg4.YGU2PQ.9sFTfFoXkKSW2wcQZg2d3iCLY2g')
+client.run()
