@@ -6,6 +6,9 @@ raw: compile
 full: compile
 	rm -f raw/FULL.txt
 	./main f
+reformat: compile
+	rm -f messages/message_full.json
+	./main F
 test: compile
 	./main t
 benchmark: compile

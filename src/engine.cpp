@@ -7,92 +7,68 @@
 
 using json = nlohmann::json;
 
-int read_full(const bool write_to_file) 
+void write_sender(Sender* sender)
 {
-    int counter = 0;
-    for(unsigned int i = Facebook::FILE_COUNT; i > 0; i--) 
-    {
-        std::ifstream stream(Facebook::MESSAGE_DIRECTORY + std::to_string(i) + ".json");
-        json file_data = json::parse(stream);
-        auto messages = file_data["messages"];
-        std::ofstream file{Facebook::RAW_DIRECTORY + "FULL.txt", std::ios_base::app};
-
-        for (unsigned int i = 0; i < messages.size(); i++) 
-        {
-            if (messages.at(i)["content"] == nullptr)
-            {
-                continue;
-            }
-            std::string message = messages.at(i)["content"];
-            std::string author = messages.at(i)["sender_name"];
-            long timestamp = messages.at(i)["timestamp_ms"];
-            if (message != "") 
-            {
-                counter++;
-                if (write_to_file) 
-                {
-                    std::string formatted = message + "|?|?|" + std::to_string(timestamp)
-                        + "|?|?|" + std::to_string(counter) +  "|?|?|" + author + "\n";
-                    file << formatted;
-                }
-            }
-        }
-    }
-    return counter;
-}
-
-void read_file(const int file_number, Sender* sender, const bool write_to_file)
-{
-    std::ifstream stream(Facebook::MESSAGE_DIRECTORY + std::to_string(file_number) + ".json");
+    std::ifstream stream(Facebook::MESSAGE_DIRECTORY + "full.json");
     json file_data = json::parse(stream);
     auto messages = file_data["messages"];
 
-    if (sender->messages.size() == 0) 
-    {
-        sender->messages = std::vector<Message>(messages.size() / Facebook::PARTICIPANT_COUNT);
-    }
+    sender->messages = std::vector<Message>(messages.size() / Facebook::PARTICIPANT_COUNT);
 
     std::string first_name = sender->name.compare("JJ Joseph") ? 
         sender->name.substr(0, sender->name.find(" ")) : "JJJ";
-    std::ofstream file{Facebook::RAW_DIRECTORY + first_name + ".txt", std::ios_base::app};
+    std::ofstream writer{Facebook::RAW_DIRECTORY + first_name + ".json", std::ios_base::app};
+    writer << "{\n\"messages\": [\n";
+    std::string delim = "";
 
-    for (int i = 0; i < messages.size(); i++) 
+    for (unsigned long int i = 0; i < messages.size(); i++) 
     {
-        if (messages.at(i)["content"] == nullptr)
-        {
-            continue;
-        }
-        std::string message = messages.at(i)["content"];
         std::string author = messages.at(i)["sender_name"];
-        long timestamp = messages.at(i)["timestamp_ms"];
-
-        if(author.compare(sender->name) == 0 && message != "") 
+        if(!author.compare(sender->name))
         {
-            Message msg = {message, timestamp};
+            Message msg = { messages.at(i)["content"], 
+                            messages.at(i)["sender_name"], 
+                            messages.at(i)["timestamp_ms"], 
+                            messages.at(i)["index_number"]  };
             sender->messages.push_back(msg);
-            if (write_to_file)
-            {
-                std::string formatted = msg.message + "|?|?|" + std::to_string(msg.timestamp) 
-                    + "|?|?|" + std::to_string(read_full(false)) +  "\n";
-                file << formatted;
-                /* file.write(formatted.c_str(), formatted.size()); */
-            }
+            json j = json{{"sender_name", messages.at(i)["sender_name"]}, 
+                {"content", messages.at(i)["content"]}, {"timestamp_ms", messages.at(i)["timestamp_ms"]}, 
+                {"index_number", messages.at(i)["index_number"]}};
+            writer << delim << j.dump() << "\n";
+            delim = ",";
         }
     }
-    file.close();
+    writer << "]\n}";
+    writer.close();
     stream.close();
 }
 
-void read_all(Sender* sender, bool write_to_file) 
+void reformat_json() 
 {
-    for(unsigned int i = 1; i <= Facebook::FILE_COUNT; i++) 
+    int global_count = 0;
+    std::string delim = "";
+    std::ofstream writer(Facebook::MESSAGE_DIRECTORY + "full.json", std::ios_base::app);
+    writer << "{\n\"messages\": [\n";
+    for (int i = Facebook::FILE_COUNT; i > 0; i--)
     {
-        read_file(i, sender, write_to_file);
+        std::ifstream stream(Facebook::MESSAGE_DIRECTORY + 
+                std::to_string(i) + ".json");
+        json file_data = json::parse(stream);
+        auto messages = file_data["messages"];
+        for(long int i = messages.size() - 1; i >= 0; i--)
+        {
+            if (messages.at(i)["content"] != nullptr && messages.at(i)["content"] != "")
+            {
+                json j = json{{"sender_name", messages.at(i)["sender_name"]}, 
+                    {"content", messages.at(i)["content"]}, {"timestamp_ms", messages.at(i)["timestamp_ms"]}, 
+                    {"index_number", global_count}};
+                writer << delim << j.dump() << "\n";
+                delim = ",";
+                global_count++;
+            }
+        }
+        stream.close();
     }
+    writer << "]\n}";
+    writer.close();
 }
-
-int check_index(int timestamp) 
-{
-    return 0;
-}
-

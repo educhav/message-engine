@@ -5,7 +5,9 @@ class Message
 {
     public:
         std::string message;
+        std::string author;
         long timestamp;
+        long index;
 };
 
 class Sender
@@ -14,6 +16,8 @@ class Sender
         std::string name;
         std::vector<Message> messages;
 };
+
+int count_messages(std::string file);
 
 namespace Facebook 
 {

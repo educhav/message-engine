@@ -19,23 +19,16 @@ int main(const int argc, const char* argv[])
             for (unsigned int i = 0; i < Facebook::PARTICIPANT_COUNT; i++) 
             {
                 Sender sender = {Facebook::PARTICIPANTS[i], std::vector<Message>()};
-                /* read_all(&sender, true); */
+                write_sender(&sender);
             }
             auto end = Clock::now();
             std::chrono::duration<double, std::milli> ms_double = end - start;
             std::cout << "read_all() - all participants: " << (float)ms_double.count() / 1000 << "s\n";
             break;
         }
-        case 'r':
+        case 'F':
         {
-            for (unsigned int i = 0; i < Facebook::PARTICIPANT_COUNT; i++)
-            {
-                Sender sender = {Facebook::PARTICIPANTS[i], std::vector<Message>()};
-                read_all(&sender, true);
-            }
+            reformat_json();
         }
-            break;
-        case 'f':
-            read_full(true);
     }
 }
