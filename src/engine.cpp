@@ -3,7 +3,7 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 
-#include "var.h"
+#include "constants.h"
 
 using json = nlohmann::json;
 
@@ -21,7 +21,7 @@ void write_sender(Sender* sender)
     writer << "{\n\"messages\": [\n";
     std::string delim = "";
 
-    for (unsigned long int i = 0; i < messages.size(); i++) 
+    for (uint32_t i = 0; i < messages.size(); i++) 
     {
         std::string author = messages.at(i)["sender_name"];
         if(!author.compare(sender->name))

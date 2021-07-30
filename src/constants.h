@@ -17,8 +17,6 @@ class Sender
         std::vector<Message> messages;
 };
 
-int count_messages(std::string file);
-
 namespace Facebook 
 {
     const std::string PARTICIPANTS[] = {"Eddie Chavez", "Degan Nestrichal", "JJ Joseph", 
@@ -27,7 +25,8 @@ namespace Facebook
                                         "Christopher Catunao", "Chloe Cumberworth", 
                                         "Berto Medina", "Valerie Kaley", "Dolly Saphire", 
                                         "Caleb Rondeau","Rande Plewka", "Lexi Fergelic", 
-                                        "Drake Fox", "JJ San Nicolas"};
+                                        "Drake Fox", "JJ San Nicolas", "Jacob Willke",
+                                        "Jonathan Franks"};
     const unsigned int PARTICIPANT_COUNT = sizeof(PARTICIPANTS) / sizeof(PARTICIPANTS[0]);
     const std::string FILTERED[] = {"joined the group chat."};
 
@@ -38,9 +37,4 @@ namespace Facebook
     /* Calculated based on avg. amount of lines between ppl to 
      * initialize vector with proper size to prevent constant O(n) resizing */
     const int AVG_LINES = 9350;
-}
-
-namespace Benchmark 
-{
-    const unsigned int SAMPLE_SIZE = 1;
 }
