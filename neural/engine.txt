@@ -1,0 +1,5 @@
+Message Engine
+- Takes in group chat data from facebook and does
+	- Gather statistics on words used
+	- Provide nice interface to receive random messages + message stream
+	- Throw into natural language processing pipeline - try to mimic said person if possible

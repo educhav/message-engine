@@ -49,7 +49,7 @@ void reformat_json()
     std::string delim = "";
     std::ofstream writer(Facebook::MESSAGE_DIRECTORY + "full.json", std::ios_base::app);
     writer << "{\n\"messages\": [\n";
-    for (int i = Facebook::FILE_COUNT; i > 0; i--)
+    for (uint32_t i = Facebook::FILE_COUNT; i > 0; i--)
     {
         std::ifstream stream(Facebook::MESSAGE_DIRECTORY + 
                 std::to_string(i) + ".json");
