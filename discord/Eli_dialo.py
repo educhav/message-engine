@@ -3,9 +3,9 @@
 import os
 
 # these modules are for querying the Hugging Face model
-import time
 import json
 import requests
+import time
 
 # the Discord Python API
 import discord
@@ -50,18 +50,19 @@ class MyClient(discord.Client):
         if message.author.id == self.user.id:
             return
 
-        # isEli = str(message.author) == "Elijah Parker#3034"
+        # isJ = str(message.author) == "J Cole Patt#6894"
 
         # if message.content.startswith("\\\\killall"):
-        #     isEli = False
+        #     isJ = False
 
         flags = message.content[:8]
 
-        if "!!" in flags or "++" in flags:
+        if "??" in flags or "++" in flags:
             flags_length = len(message.content.split(" ")[0])
             payload = {'inputs': {'text': message.content[flags_length:]}}
             async with message.channel.typing():
                 response = self.query(payload)
+
 
             bot_response = response.get('generated_text', None)
 
@@ -73,10 +74,11 @@ class MyClient(discord.Client):
 
             await message.channel.send(bot_response)
 
+
 def main():
     # DialoGPT-medium-joshua is my model name
-    client = MyClient('J-DialoGPT-small')
-    client.run(os.environ['J_DISCORD_TOKEN'])
+    client = MyClient('Elijah-DialoGPT-small')
+    client.run(os.environ['ELIJAH_DISCORD_TOKEN'])
 
 if __name__ == '__main__':
   main()

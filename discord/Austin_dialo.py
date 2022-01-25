@@ -5,6 +5,7 @@ import os
 # these modules are for querying the Hugging Face model
 import json
 import requests
+import time
 
 # the Discord Python API
 import discord
@@ -46,41 +47,36 @@ class MyClient(discord.Client):
         self.query({'inputs': {'text': 'Hello!'}})
 
     async def on_message(self, message):
-        """
-        this function is called whenever the bot sees a message in a channel
-        """
-
-        if not message.content.startswith("??"):
-            return
-        # ignore the message if it comes from the bot itself
         if message.author.id == self.user.id:
             return
 
+        # isJ = str(message.author) == "J Cole Patt#6894"
 
-        # form query payload with the content of the message
-        payload = {'inputs': {'text': message.content[2:]}}
+        # if message.content.startswith("\\\\killall"):
+        #     isJ = False
+        flags = message.content[:8]
 
-        # while the bot is waiting on a response from the model
-        # set the its status as typing for user-friendliness
-        async with message.channel.typing():
-          response = self.query(payload)
-        bot_response = response.get('generated_text', None)
-        
-        # we may get ill-formed response if the model hasn't fully loaded
-        # or has timed out
-        if not bot_response:
-            if 'error' in response:
-                bot_response = '`Error: {}`'.format(response['error'])
-            else:
-                bot_response = 'Hmm... something is not right.'
+        if "&&" in flags or "++" in flags:
+            flags_length = len(message.content.split(" ")[0])
+            payload = {'inputs': {'text': message.content[flags_length:]}}
+            async with message.channel.typing():
+                response = self.query(payload)
 
-        # send the model's response to the Discord channel
-        await message.channel.send(bot_response)
+
+            bot_response = response.get('generated_text', None)
+
+            if not bot_response:
+                if 'error' in response:
+                    bot_response = '`Error: {}`'.format(response['error'])
+                else:
+                    bot_response = 'Hmm... something is not right.'
+
+            await message.channel.send(bot_response)
+
 
 def main():
-    # DialoGPT-medium-joshua is my model name
-    client = MyClient('Elijah-DialoGPT-small')
-    client.run(os.environ['DISCORD_TOKEN'])
+    client = MyClient('Austin-DialoGPT-small')
+    client.run(os.environ['AUSTIN_DISCORD_TOKEN'])
 
 if __name__ == '__main__':
   main()
