@@ -2,3 +2,4 @@ messages
 raw
 bot/test.py
 neural/data
+neural/models
